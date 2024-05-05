@@ -33,12 +33,21 @@ def plot_feature_distribution(df):
     features = ['popularity', 'danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'liveness', 'valence', 'tempo']
     data = [df[feature] for feature in features]
     for i, ax in enumerate(axs.flat):
-        ax.hist(data[i], bins=20, color='skyblue', edgecolor='black')
-        ax.set_title(features[i], fontstyle='italic')
+        sns.histplot(data[i], bins=20, color='skyblue', ax=ax, edgecolor='black', kde=True)
+        skewness = data[i].skew()
+        ax.set_title(f'{features[i]} (Skew: {skewness:.2f})', fontstyle='italic')
+
+        if skewness > 0:
+            ax.text(0.05, 0.9, 'Right Skew', transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='orange', alpha=0.5))
+        elif skewness < 0:
+            ax.text(0.05, 0.9, 'Left Skew', transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='orange', alpha=0.5))
+        else:
+            ax.text(0.05, 0.9, 'No Skew', transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='orange', alpha=0.5))
+        
         ax.set_xlabel('Value')
-        ax.set_ylabel('Frequency')
+        ax.set_ylabel('Frequency')    
     plt.tight_layout()
-    plt.suptitle('Feature Distribution', fontsize=16, fontweight='bold', y=1.02)
+    plt.suptitle('Feature Distribution with Skewness', fontsize=16, fontweight='bold', y=1.02)
     plt.show()
 
 def plot_yearly_distribution(df):
@@ -189,8 +198,6 @@ def plot_popularity_explicit(df):
     plt.tight_layout()
     plt.show()
 
-
-
 def plot_tempo_popularity(df):
     plt.figure(figsize=(10, 6))
     plt.scatter(df['tempo'], df['popularity'], c=df['tempo'], cmap='plasma')
@@ -217,7 +224,6 @@ def plot_energy_danceability(df):
 
 def plot_confidence_interval(lower_bound, upper_bound, confidence):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
-
     counts, bins, _ = ax1.hist(lower_bound, bins=20, density=True, alpha=0.7, color='b')
     ax1.set_title('Lower Bound Confidence Interval')
     ax1.set_xlabel('Value')
@@ -289,13 +295,4 @@ def descriptive_statistics(df):
 
     
 
-
-
-
-
-
-
-
-
-    
 

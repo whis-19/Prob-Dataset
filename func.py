@@ -46,7 +46,6 @@ def plot_yearly_distribution(df):
     years = grouped_df['year']
     total_songs = grouped_df['song']
     plt.figure(figsize=(10, 6))
-
     plt.plot(years, total_songs, marker='o', color='green')
     plt.title('Year by Year Songs Collection', fontsize=16)
     plt.xlabel('Year', fontsize=14)
@@ -141,7 +140,6 @@ def plot_top_songs(df,n):
     plt.show()
 
 def plot_explicit_content(df):
-
     grouped_df = df.groupby('explicit', as_index=False).count().sort_values(by='song', ascending=False)
     labels = grouped_df['explicit']
     sizes = grouped_df['song']
@@ -241,7 +239,6 @@ def plot_confidence_interval(lower_bound, upper_bound, confidence):
     x_upper = np.arange(0, max(bins), 1)
     ax2.plot(x_upper, poisson_dist_upper.pmf(x_upper), color='r', label='Poisson Distribution')
     ax2.legend()
-
     plt.tight_layout()
     plt.show()
 
@@ -257,8 +254,48 @@ def prediction_results(df,confidance):
         print()
     plot_confidence_interval(metrics['Lower Bound'],metrics['Upper Bound'],confidance)
 
+
+
 def descriptive_statistics(df):
     print("Descriptive Statistics:")
     print(df.describe())
     print("\nMode Statistics:")
     print(df.mode())
+    
+    variance = df.describe().loc['std'] ** 2
+    print("\nVariance:")
+    print(variance)
+
+    duration_ms = df['duration_ms'].median()
+    year = df['year'].median()
+    popularity = df['popularity'].median()
+    danceability = df['danceability'].median()
+    energy = df['energy'].median()
+    key = df['key'].median()
+    loudness = df['loudness'].median()
+    speechiness = df['speechiness'].median()
+    acousticness = df['acousticness'].median()
+    instrumentalness = df['instrumentalness'].median()
+    liveness = df['liveness'].median()
+    valence = df['valence'].median()
+    tempo = df['tempo'].median()
+    stats = pd.DataFrame({'Duration (ms)': [duration_ms], 'Year': [year], 'Popularity': [popularity], \
+                          'Danceability': [danceability], 'Energy': [energy], 'Key': [key], 'Loudness': [loudness], \
+                          'Speechiness': [speechiness], 'Acousticness': [acousticness], \
+                          'Instrumentalness': [instrumentalness], 'Liveness': [liveness], \
+                          'Valence': [valence], 'Tempo': [tempo], 'BPM': [(60 / (1e-3 * tempo))]})
+    print(stats)
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
